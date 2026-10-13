@@ -3,7 +3,7 @@ setlocal EnableExtensions
 cd /d "%~dp0"
 echo.
 echo GE Trade Journal - Windows RuneLite Development Test
-echo Standalone GE tracking only. No Discord, bot, or network integration.
+echo Local Grand Exchange trade tracking.
 echo.
 where java >nul 2>&1 || goto nojava
 where javac >nul 2>&1 || goto nojava
