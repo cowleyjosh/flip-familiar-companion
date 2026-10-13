@@ -1,35 +1,47 @@
 package com.getradejournal;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import net.runelite.client.util.Filepath;
 
 /** Local-only, append-only history and crash-safe replacement of current snapshots. */
-final class LocalJournal
+final class LocalJournal implements JournalStorage
 {
-    private final Path dir;
-    LocalJournal(Path dir) throws IOException { this.dir=dir; Files.createDirectories(dir); }
+    private final Filepath dir;
 
-    void append(String jsonLine) throws IOException
+    LocalJournal(Filepath dir) throws IOException
     {
-        Files.write(dir.resolve("events.jsonl"), (jsonLine+"\n").getBytes(StandardCharsets.UTF_8),
+        this.dir = dir;
+        dir.createDirectories();
+    }
+
+    @Override public void append(String jsonLine) throws IOException
+    {
+        dir.joinSegment("events.jsonl").write(jsonLine + "\n",
             StandardOpenOption.CREATE, StandardOpenOption.APPEND);
     }
 
-    void current(String json) throws IOException
+    @Override public void current(String json) throws IOException
     {
-        Path target=dir.resolve("current_offers.json");
-        Path temp=Files.createTempFile(dir, "current_offers", ".tmp");
+        Filepath target = dir.joinSegment("current_offers.json");
+        Filepath temp = dir.createTempFile("current_offers", ".tmp");
         try
         {
-            Files.write(temp, json.getBytes(StandardCharsets.UTF_8));
-            try { Files.move(temp,target,StandardCopyOption.REPLACE_EXISTING,StandardCopyOption.ATOMIC_MOVE); }
-            catch (AtomicMoveNotSupportedException e) { Files.move(temp,target,StandardCopyOption.REPLACE_EXISTING); }
+            temp.write(json);
+            try
+            {
+                temp.moveTo(target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+            }
+            catch (AtomicMoveNotSupportedException ex)
+            {
+                temp.moveTo(target, StandardCopyOption.REPLACE_EXISTING);
+            }
         }
-        finally { Files.deleteIfExists(temp); }
+        finally
+        {
+            temp.deleteIfExists();
+        }
     }
 }

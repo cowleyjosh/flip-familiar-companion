@@ -9,7 +9,7 @@ import java.util.UUID;
 /** Pure-Java order tracking. Never posts data to a network endpoint. */
 final class TradeJournal
 {
-    private final LocalJournal journal;
+    private final JournalStorage journal;
     private final String account;
     private final String sessionId=UUID.randomUUID().toString();
     private final Map<Integer, OfferState> offers=new HashMap<>();
@@ -17,7 +17,7 @@ final class TradeJournal
     private final Map<Integer, String> names=new HashMap<>();
     private boolean bootstrapped=false;
 
-    TradeJournal(LocalJournal journal, String account) { this.journal=journal; this.account=account; }
+    TradeJournal(JournalStorage journal, String account) { this.journal=journal; this.account=account; }
     boolean isBootstrapped() { return bootstrapped; }
 
     // Initial login is a baseline, not historical fill events.

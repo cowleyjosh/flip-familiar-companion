@@ -1,9 +1,7 @@
 package com.getradejournal;
 
 import com.google.inject.Provides;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import net.runelite.client.util.Filepath;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -23,7 +21,6 @@ import org.slf4j.LoggerFactory;
 public class GeTradeJournalPlugin extends Plugin
 {
     private static final Logger log=LoggerFactory.getLogger(GeTradeJournalPlugin.class);
-    private static final Path ROOT=Paths.get(System.getProperty("user.home"),".runelite","ge-trade-journal");
     @Inject private Client client;
     @Inject private ItemManager items;
     @Inject private GeTradeJournalConfig config;
@@ -111,8 +108,8 @@ public class GeTradeJournalPlugin extends Plugin
         if (safe.isEmpty()) return false;
         try
         {
-            Path dir=ROOT.resolve(safe);
-            Files.createDirectories(dir);
+            Filepath dir=getPluginDirectory().joinSegment(safe);
+            dir.createDirectories();
             journal=new TradeJournal(new LocalJournal(dir),name);
             character=name;
             ticksSinceLogin=0;

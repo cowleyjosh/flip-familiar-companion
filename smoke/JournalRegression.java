@@ -27,7 +27,7 @@ public final class JournalRegression
         {
             folder = Files.createTempDirectory(
                 Path.of(System.getenv("GE_JOURNAL_TEST_ROOT")), "ge-regression-");
-            trade = new TradeJournal(new LocalJournal(folder), "Account\"A");
+            trade = new TradeJournal(new TestJournalStorage(folder), "Account\"A");
         }
         void baseline(OfferState... initial) throws Exception
         {
@@ -110,7 +110,7 @@ public final class JournalRegression
         restart.baseline();
         restart.trade.observe(o(4,8,500,10,3,1500,"BUYING"),"Item");
         long before=restart.count("BUY_FILL");
-        TradeJournal restarted = new TradeJournal(new LocalJournal(restart.folder),"Account\"A");
+        TradeJournal restarted = new TradeJournal(new TestJournalStorage(restart.folder),"Account\"A");
         OfferState[] existing = new OfferState[8];
         existing[4]=o(4,8,500,10,3,1500,"BUYING");
         restarted.bootstrap(existing,new String[8]);
