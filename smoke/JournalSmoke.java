@@ -12,7 +12,7 @@ public class JournalSmoke
     public static void main(String[] args) throws Exception
     {
         Path dir=Files.createTempDirectory("ge-journal-");
-        LocalJournal disk=new TestJournalStorage(dir);
+        JournalStorage disk=new TestJournalStorage(dir);
         TradeJournal journal=new TradeJournal(disk,"Test account");
         OfferState[] baseline=new OfferState[8];
         for(int i=0;i<8;i++) baseline[i]=offer(i,0,0,0,0,0,"EMPTY");
