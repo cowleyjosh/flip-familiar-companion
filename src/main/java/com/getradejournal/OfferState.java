@@ -5,14 +5,14 @@ final class OfferState
 {
     final int slot;
     final int itemId;
-    final int price;
+    final long price;
     final int quantity;
     final int filled;
     final long cumulativeGp;
     final String status;
     final String side;
 
-    OfferState(int slot, int itemId, int price, int quantity, int filled, long cumulativeGp, String status)
+    OfferState(int slot, int itemId, long price, int quantity, int filled, long cumulativeGp, String status)
     {
         this.slot=slot; this.itemId=itemId; this.price=price;
         this.quantity=quantity; this.filled=filled; this.cumulativeGp=cumulativeGp;
