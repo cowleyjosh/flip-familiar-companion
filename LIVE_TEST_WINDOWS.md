@@ -2,7 +2,7 @@
 
 **Status:** A successful GitHub Actions build is not a live GE test. This test is required before requesting Plugin Hub publication.
 
-This project is standalone and local-only. It does not need Flip Familiar, Discord, API keys, or an HTTP connection.
+The plugin saves GE observations locally. No external service or account setup is required.
 
 ## 1. Run the development client once
 
