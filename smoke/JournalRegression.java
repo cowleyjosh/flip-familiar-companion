@@ -10,7 +10,7 @@ import java.util.List;
 public final class JournalRegression
 {
     private static int assertions = 0;
-    private static OfferState o(int slot, int item, int price, int qty, int fill, long gp, String state)
+    private static OfferState o(int slot, int item, long price, int qty, int fill, long gp, String state)
     { return new OfferState(slot, item, price, qty, fill, gp, state); }
 
     private static void check(boolean result, String message)
@@ -134,6 +134,16 @@ public final class JournalRegression
         empty.baseline();
         check(empty.current().contains("\"empty\":true"), "empty slots must be represented");
         check(empty.count("OFFER_OBSERVED")==0,"no fake history on fresh account");
+
+        // RuneLite's GrandExchangeOffer.getPrice() returns long; do not truncate rare-item prices.
+        Run expensive = new Run();
+        expensive.baseline();
+        long rarePrice = 3_100_000_000L;
+        expensive.trade.observe(o(5, 999, rarePrice, 2, 0, 0, "BUYING"), "High-value item");
+        expensive.trade.observe(o(5, 999, rarePrice, 2, 1, rarePrice, "BUYING"), "High-value item");
+        check(expensive.current().contains("\\"offer_price\\":" + rarePrice), "GE offer price must preserve 64-bit values");
+        check(expensive.lines().stream().anyMatch(line -> line.contains("\\"delta_gp\\":" + rarePrice)),
+            "Fill GP must preserve 64-bit values");
 
         System.out.println("GE Trade Journal regression PASSED (" + assertions + " assertions)");
     }
