@@ -141,8 +141,8 @@ public final class JournalRegression
         long rarePrice = 3_100_000_000L;
         expensive.trade.observe(o(5, 999, rarePrice, 2, 0, 0, "BUYING"), "High-value item");
         expensive.trade.observe(o(5, 999, rarePrice, 2, 1, rarePrice, "BUYING"), "High-value item");
-        check(expensive.current().contains("\\"offer_price\\":" + rarePrice), "GE offer price must preserve 64-bit values");
-        check(expensive.lines().stream().anyMatch(line -> line.contains("\\"delta_gp\\":" + rarePrice)),
+        check(expensive.current().contains("\"offer_price\":" + rarePrice), "GE offer price must preserve 64-bit values");
+        check(expensive.lines().stream().anyMatch(line -> line.contains("\"delta_gp\":" + rarePrice)),
             "Fill GP must preserve 64-bit values");
 
         System.out.println("GE Trade Journal regression PASSED (" + assertions + " assertions)");
