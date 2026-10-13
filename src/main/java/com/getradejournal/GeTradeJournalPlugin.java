@@ -17,7 +17,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@PluginDescriptor(name="GE Trade Journal", description="Save Grand Exchange offers and fills as local JSON files", tags={"grand exchange","ge","history","trading"})
+@PluginDescriptor(name="GE Trade Journal", internalName="ge-trade-journal", description="Save Grand Exchange offers and fills as local JSON files", tags={"grand exchange","ge","history","trading"})
 public class GeTradeJournalPlugin extends Plugin
 {
     private static final Logger log=LoggerFactory.getLogger(GeTradeJournalPlugin.class);
